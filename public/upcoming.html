@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Dramas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: maroon;
+        }
+        .upcoming-list {
+            list-style: none;
+            padding: 0;
+            background: maroon;
+        }
+        .upcoming-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #f8f2f2;
+            background-color:rgb(206, 226, 245);
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upcoming Dramas</h1>
+        <ul class="upcoming-list" id="upcoming-list">
+            <!-- Upcoming dramas will be dynamically added here -->
+        </ul>
+    </div>
+
+    <script>
+        const upcomingDramas = [
+            { title: "7 Escape", releaseDate: "15 September 2023", videoUrl: "drama1.mp4"},
+            { title:"Youth", releaseDate: " November 2023", videoUrl: "drama2.mp4" },
+            { title: "The Worst of Evi", releaseDate: "27 September 2023", videoUrl: "drama3.mp4" },
+            // Add more upcoming dramas here
+        ];
+
+        const upcomingList = document.getElementById("upcoming-list");
+
+        upcomingDramas.forEach(drama => {
+            const releaseDate = new Date(drama.releaseDate).toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            });
+
+            const upcomingItem = document.createElement("li");
+            upcomingItem.classList.add("upcoming-item");
+            upcomingItem.innerHTML = `
+                <h2>${drama.title}</h2>
+                <p><strong>Release Date:</strong> ${releaseDate}</p>
+                <button data-url="${drama.videoUrl}" class="watch-button">Watch Trailer</button>
+            `;
+            upcomingList.appendChild(upcomingItem);
+        });
+
+        const watchButtons = document.querySelectorAll(".watch-button");
+        watchButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const videoUrl = button.getAttribute("data-url");
+                openVideoPlayer(videoUrl);
+            });
+        });
+
+        function openVideoPlayer(videoUrl) {
+            const playerWindow = window.open("", "_blank");
+            playerWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Watch Trailer</title>
+                    <style>
+                        body {
+                            margin: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                            background-color: #000;
+                        }
+                        video {
+                            max-width: 100%;
+                            max-height: 100%;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <video controls autoplay>
+                        <source src="${videoUrl}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </body>
+                </html>
+            `);
+        }
+    </script>
+</body>
+</html>
